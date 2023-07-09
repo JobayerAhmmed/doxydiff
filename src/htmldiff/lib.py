@@ -76,14 +76,18 @@ def split_html(html_string):
     """
     LOG.debug('Splitting html into start, body, end...')
     try:
-        i = html_string.index('<body')
+        i = html_string.index('<div class="contents"')
         j = html_string.index('>', i) + 1
-        k = html_string.index('</body')
+        k = html_string.index('<div id="nav-path" class="navpath">', j)
     except ValueError:
         raise ValueError('This is not a full html document.')
     start = html_string[:j]
     body = html_string[j:k]
-    ending = html_string[k:]
+    last_div_i = body.rindex('</div>')
+    body = body[:last_div_i]
+    last_div_i = body.rindex('</div>')
+    body = body[:last_div_i]
+    ending = '</div>\n</div>\n' + html_string[k:]
     return start, body, ending
 
 
