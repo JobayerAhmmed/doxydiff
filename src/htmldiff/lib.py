@@ -346,7 +346,12 @@ def whitespacegen(spaces):
     LOG.debug('Generating whitespace...')
     # The average length of a word is 5 letters.. I guess
     words = spaces / 5
-    s = '&nbsp;&nbsp;&nbsp;&nbsp; ' * int(words)
+
+    # 
+    # @author Jobayer Ahmmed
+    # 
+    # s = '&nbsp;&nbsp;&nbsp;&nbsp; ' * int(words)
+    s = '&nbsp;'
 
     # s = " " * spaces
     return '<span style="white-space: pre-wrap;">{0}</span>'.format(s)
@@ -413,7 +418,7 @@ def gen_side_by_side(file_string):
     # Create side-by-side diff
     sbs_diff = (
         '%(start)s%(container)s%(orig_start)s%(left)s%(div_end)s%(new_start)s'
-        '%(right)s%(div_end)s%(ending)s' % {
+        '%(right)s%(div_end)s%(div_end)s%(ending)s' % {
             'start': start,
             'container': container_div,
             'orig_start': orig_div_start,
