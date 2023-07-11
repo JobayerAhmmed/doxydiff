@@ -88,6 +88,11 @@ def diff():
     output_file = abspath(parsed_args.out_fn) if parsed_args.out_fn else None
     accurate_mode = parsed_args.accurate_mode
     sbs = parsed_args.side_by_side
+    # input_file1 = '/workspace/kconfig_doc/commit_parser/data/temp/busybox_doc/2635369a92db338321b2ba38e73539992967357c/html/d3/d0a/find_8c.html'
+    # input_file2 = '/workspace/kconfig_doc/commit_parser/data/temp/busybox_doc/242d0562307549af61b234bff545ca13474a2603/html/d3/d0a/find_8c.html'
+    # output_file = '/workspace/kconfig_doc/commit_parser/data/temp/busybox_doc/242d0562307549af61b234bff545ca13474a2603/html/d3/d0a/find_8c_diff.html'
+    # accurate_mode = True
+    # sbs = True
     if sbs:
         LOG.info('Selected side-by-side diff')
     else:

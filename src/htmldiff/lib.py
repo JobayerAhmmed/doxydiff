@@ -161,7 +161,6 @@ class HTMLMatcher(SequenceMatcher):
             '.insert {\n\tbackground-color: #AFA\n}\n'
             '.delete {\n'
             '\tbackground-color: #F88;\n'
-            '\ttext-decoration: line-through;\n'
             '}\n'
             '.tagInsert {\n\tbackground-color: #070;\n\tcolor: #FFF\n}\n'
             '.tagDelete {\n\tbackground-color: #700;\n\tcolor: #FFF\n}\n'
@@ -237,6 +236,7 @@ class HTMLMatcher(SequenceMatcher):
             if item.startswith('<'):
                 self.out_delete(''.join(text), out)
                 text = []
+                out.write(utf8_encode(item))
             else:
                 text.append(item)
         self.out_delete(''.join(text), out)
@@ -253,14 +253,14 @@ class HTMLMatcher(SequenceMatcher):
         self.out_insert(''.join(text), out)
 
     def out_delete(self, s, out):
-        if not s.strip():
+        if not s.strip() or s == '&#160;':
             val = s
         else:
             val = ''.join((self.start_delete_text, s, self.end_span_text))
         out.write(utf8_encode(val))
 
     def out_insert(self, s, out):
-        if not s.strip():
+        if not s.strip() or s == '&#160;':
             val = s
         else:
             val = ''.join((self.start_insert_text, s, self.end_span_text))
@@ -349,11 +349,8 @@ def whitespacegen(spaces):
     """
     LOG.debug('Generating whitespace...')
     # The average length of a word is 5 letters.. I guess
-    words = spaces / 5
+    # words = spaces / 5
 
-    # 
-    # @author Jobayer Ahmmed
-    # 
     # s = '&nbsp;&nbsp;&nbsp;&nbsp; ' * int(words)
     s = '&nbsp;'
 
