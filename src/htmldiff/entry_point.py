@@ -13,7 +13,7 @@ from os.path import abspath
 
 # Project
 from htmldiff.lib import diff_files, gen_side_by_side
-from htmldiff.doxy import diff_dirs
+from htmldiff.doxy import create_dir_diff
 from htmldiff.logger import logging_init
 
 # Setup the version string
@@ -137,12 +137,12 @@ def diff():
 
     LOG.info('Diffing files...')
     if dir_compare:
-        diff_dirs(input_file1, input_file2, accurate_mode, output_file)
+        create_dir_diff(input_file1, input_file2, accurate_mode, output_file)
     else:
-        diff_files(input_file1, input_file2, accurate_mode, sbs, output_file)
+        create_file_diff(input_file1, input_file2, accurate_mode, sbs, output_file)
 
 
-def diff_files(input_file1, input_file2, accurate_mode, sbs, output_file):
+def create_file_diff(input_file1, input_file2, accurate_mode, sbs, output_file):
     try:
         diffed_html = diff_files(input_file1, input_file2, accurate_mode)
         if sbs:

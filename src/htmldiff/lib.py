@@ -80,7 +80,7 @@ def split_html(html_string):
         j = html_string.index('>', i) + 1
         k = html_string.index('<div id="nav-path" class="navpath">', j)
     except ValueError:
-        raise ValueError('This is not a full html document.')
+        raise ValueError('This is not a doxygen generated html document.')
     start = html_string[:j]
     body = html_string[j:k]
     last_div_i = body.rindex('</div>')

@@ -7,7 +7,7 @@ setup(
     description=("Utility to create html diffs"),
     packages=find_packages('src'),
     package_dir={"": "src"},
-    install_requires=["boltons>=17.1.0", "six"],
+    install_requires=["boltons>=17.1.0", "six", "lxml"],
     test_suite="tests",
     entry_points={
         "console_scripts": [
