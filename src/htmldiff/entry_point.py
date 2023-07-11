@@ -13,6 +13,7 @@ from os.path import abspath
 
 # Project
 from htmldiff.lib import diff_files, gen_side_by_side
+from htmldiff.doxy import diff_dirs
 from htmldiff.logger import logging_init
 
 # Setup the version string
@@ -36,11 +37,11 @@ def diff():
     parser.add_argument('INPUT_FILE2')
     parser.add_argument(
         '-o',
-        '--output_file',
+        '--output_file_or_dir',
         action='store',
         dest='out_fn',
         default=None,
-        help='[OPTIONAL] Write to given output file instead of stdout'
+        help='[OPTIONAL] Write to given output file or directory instead of stdout or \'diff\''
     )
     parser.add_argument(
         '-a',
@@ -53,8 +54,16 @@ def diff():
     parser.add_argument(
         '-s',
         '--side-by-side',
-        help='generate a side-by-side comparision instead of inline',
+        help='Generate a side-by-side comparision instead of inline',
         dest='side_by_side',
+        default=False,
+        action='store_true'
+    )
+    parser.add_argument(
+        '-d',
+        '--directory',
+        help='Compare directories',
+        dest='dir_compare',
         default=False,
         action='store_true'
     )
@@ -88,12 +97,11 @@ def diff():
     output_file = abspath(parsed_args.out_fn) if parsed_args.out_fn else None
     accurate_mode = parsed_args.accurate_mode
     sbs = parsed_args.side_by_side
-    # input_file1 = '/workspace/kconfig_doc/commit_parser/data/temp/busybox_doc/2635369a92db338321b2ba38e73539992967357c/html/d3/d0a/find_8c.html'
-    # input_file2 = '/workspace/kconfig_doc/commit_parser/data/temp/busybox_doc/242d0562307549af61b234bff545ca13474a2603/html/d3/d0a/find_8c.html'
-    # output_file = '/workspace/kconfig_doc/commit_parser/data/temp/busybox_doc/242d0562307549af61b234bff545ca13474a2603/html/d3/d0a/find_8c_diff.html'
-    # accurate_mode = True
-    # sbs = True
-    if sbs:
+    dir_compare = parsed_args.dir_compare
+    
+    if dir_compare:
+        LOG.info('Selected dir compare')
+    elif sbs:
         LOG.info('Selected side-by-side diff')
     else:
         LOG.info('Selected inline diff')
@@ -101,13 +109,26 @@ def diff():
     if not os.path.exists(input_file1):
         LOG.error('Could not find: {0}'.format(input_file1))
         sys.exit(1)
-
     if not os.path.exists(input_file2):
         LOG.error('Could not find: {0}'.format(input_file2))
         sys.exit(1)
 
-    LOG.debug('File 1: {0}'.format(input_file1))
-    LOG.debug('File 2: {0}'.format(input_file2))
+    if dir_compare:
+        if not os.path.isdir(input_file1):
+            LOG.error('Not a directory: {0}'.format(input_file1))
+            sys.exit(1)
+        if not os.path.isdir(input_file2):
+            LOG.error('Not a directory: {0}'.format(input_file2))
+            sys.exit(1)
+        if not output_file:
+            output_file = abspath('diff')
+
+    if dir_compare:
+        LOG.debug('Dir 1: {0}'.format(input_file1))
+        LOG.debug('Dir 2: {0}'.format(input_file2))
+    else:
+        LOG.debug('File 1: {0}'.format(input_file1))
+        LOG.debug('File 2: {0}'.format(input_file2))
 
     if parsed_args.accurate_mode:
         LOG.debug("Using 'Accurate' mode")
@@ -115,6 +136,13 @@ def diff():
         LOG.debug("Using 'Risky' mode")
 
     LOG.info('Diffing files...')
+    if dir_compare:
+        diff_dirs(input_file1, input_file2, accurate_mode, output_file)
+    else:
+        diff_files(input_file1, input_file2, accurate_mode, sbs, output_file)
+
+
+def diff_files(input_file1, input_file2, accurate_mode, sbs, output_file):
     try:
         diffed_html = diff_files(input_file1, input_file2, accurate_mode)
         if sbs:

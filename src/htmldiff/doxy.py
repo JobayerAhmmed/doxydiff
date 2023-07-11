@@ -1,9 +1,13 @@
 import os
 import filecmp
+import logging
 
 
 
-def diff_dirs(initial_path, new_path, accurate_mode):
+LOG = logging.getLogger(__name__)
+
+
+def diff_dirs(initial_path, new_path, accurate_mode, output_file):
     """
     Given two directories, compare them and find same, changed,
     added, deleted, renamed files.
@@ -17,6 +21,9 @@ def diff_dirs(initial_path, new_path, accurate_mode):
     :param accurate_mode: use accurate mode or not
     :returns: string containing diffed html from initial_path and new_path
     """
+
+    # if not os.path.isdir(output_file):
+    #     os.makedirs(output_file)
     pass
 
 
