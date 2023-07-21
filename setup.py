@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 
 setup(
-    name="htmldiff",
+    name="doxydiff",
     version="1.0.0.dev6",
     author="Ian Bicking - https://github.com/ianb",
     description=("Utility to create html diffs"),
