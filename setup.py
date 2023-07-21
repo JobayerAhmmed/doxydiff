@@ -11,7 +11,7 @@ setup(
     test_suite="tests",
     entry_points={
         "console_scripts": [
-            "htmldiff = htmldiff.entry_point:main",
+            "doxydiff = htmldiff.entry_point:main",
         ]
     }
 )
